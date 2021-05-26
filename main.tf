@@ -102,12 +102,10 @@ data "databricks_node_type" "smallest" {
   depends_on = [azurerm_databricks_workspace.this]
 }
 
-resource "databricks_cluster" "shared_autoscaling" {
-  cluster_name            = "Shared Autoscaling"
-  # spark_version           = data.databricks_spark_version.latest_lts.id
-  spark_version           = "7.3.x-scala2.12"
-  # node_type_id            = data.databricks_node_type.smallest.id
-  node_type_id            = "Standard_F4s"
+resource "databricks_cluster" "cluster" {
+  cluster_name            = "default_cluster"
+  spark_version           = data.databricks_spark_version.latest_lts.id
+  node_type_id            = data.databricks_node_type.smallest.id
   autotermination_minutes = 20
   autoscale {
     min_workers = 1
@@ -136,7 +134,7 @@ resource "azurerm_role_assignment" "this" {
 }
 
 resource "databricks_azure_adls_gen2_mount" "this" {
-  cluster_id             = databricks_cluster.shared_autoscaling.id
+  cluster_id             = databricks_cluster.cluster.id
   storage_account_name   = var.storage_account_name
   container_name         = "trainingdata"
   mount_name             = "data"
