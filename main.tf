@@ -12,6 +12,12 @@ terraform {
 }
 
 
+locals {
+  resource_postfix             = "${var.project_name}-${var.resource_number}"
+  resource_postfix_restricted  = "${var.project_name}${var.resource_number}"
+}
+
+
 data "azurerm_client_config" "current" {}
 
 data "azurerm_resource_group" "this" {
@@ -19,7 +25,7 @@ data "azurerm_resource_group" "this" {
 }
 
 resource "azurerm_network_security_group" "nsg" {
-  name                = "nsg-testing"
+  name                = "nsg-${local.resource_postfix}"
   location            = data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
 }
@@ -68,7 +74,7 @@ resource "azurerm_subnet_network_security_group_association" "nsg_pub" {
 }
 
 resource "azurerm_databricks_workspace" "this" {
-  name                = "databricks-test"
+  name                = "db-${local.resource_postfix}"
   resource_group_name = data.azurerm_resource_group.this.name
   location            = data.azurerm_resource_group.this.location
   sku                 = "premium"
