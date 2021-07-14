@@ -126,12 +126,13 @@ resource "databricks_secret" "this" {
   depends_on = [azurerm_databricks_workspace.this]
 }
 
-resource "azurerm_role_assignment" "this" {
-  scope                = var.storage_account_id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = data.azurerm_client_config.current.object_id
-  depends_on = [azurerm_databricks_workspace.this]
-}
+# Disabled due to CCoE restriction
+# resource "azurerm_role_assignment" "this" {
+#   scope                = var.storage_account_id
+#   role_definition_name = "Storage Blob Data Contributor"
+#   principal_id         = data.azurerm_client_config.current.object_id
+#   depends_on = [azurerm_databricks_workspace.this]
+# }
 
 resource "databricks_azure_adls_gen2_mount" "this" {
   cluster_id             = databricks_cluster.cluster.id
