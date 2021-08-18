@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = ">=2.62.0"
     }
   }
@@ -9,15 +9,12 @@ terraform {
 
 
 locals {
-  resource_postfix             = "${var.project_name}-${var.resource_number}"
-  resource_postfix_restricted  = "${var.project_name}${var.resource_number}"
+  resource_postfix            = "${var.project_name}-${var.resource_number}"
+  resource_postfix_restricted = "${var.project_name}${var.resource_number}"
 }
 
-
-data "azurerm_client_config" "current" {}
-
 data "azurerm_resource_group" "this" {
-  name     = var.resource_group_name
+  name = var.resource_group_name
 }
 
 resource "azurerm_network_security_group" "nsg" {
@@ -38,7 +35,7 @@ resource "azurerm_subnet" "priv_databricks_subnet" {
     name = "delegation"
 
     service_delegation {
-      name    = "Microsoft.Databricks/workspaces"
+      name = "Microsoft.Databricks/workspaces"
     }
   }
 }
@@ -59,7 +56,7 @@ resource "azurerm_subnet" "pub_databricks_subnet" {
     name = "delegation"
 
     service_delegation {
-      name    = "Microsoft.Databricks/workspaces"
+      name = "Microsoft.Databricks/workspaces"
     }
   }
 }
@@ -70,13 +67,14 @@ resource "azurerm_subnet_network_security_group_association" "nsg_pub" {
 }
 
 resource "azurerm_databricks_workspace" "this" {
-  name                = "db-${local.resource_postfix}"
-  resource_group_name = data.azurerm_resource_group.this.name
-  location            = data.azurerm_resource_group.this.location
-  sku                 = "premium"
+  name                          = "db-${local.resource_postfix}"
+  resource_group_name           = data.azurerm_resource_group.this.name
+  location                      = data.azurerm_resource_group.this.location
+  sku                           = "premium"
+  public_network_access_enabled = true
   custom_parameters {
     virtual_network_id  = var.virtual_network_id
     private_subnet_name = azurerm_subnet.priv_databricks_subnet.name
-    public_subnet_name = azurerm_subnet.pub_databricks_subnet.name
+    public_subnet_name  = azurerm_subnet.pub_databricks_subnet.name
   }
 }
