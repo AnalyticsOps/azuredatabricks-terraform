@@ -75,6 +75,8 @@ resource "azurerm_databricks_workspace" "this" {
   custom_parameters {
     virtual_network_id  = var.virtual_network_id
     private_subnet_name = azurerm_subnet.priv_databricks_subnet.name
+    private_subnet_network_security_group_association_id = azurerm_subnet_network_security_group_association.nsg_priv.id
     public_subnet_name  = azurerm_subnet.pub_databricks_subnet.name
+    public_subnet_network_security_group_association_id = azurerm_subnet_network_security_group_association.nsg_pub.id
   }
 }
