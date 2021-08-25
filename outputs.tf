@@ -8,8 +8,3 @@ output "subnets" {
 output "databricks_id" {
   value = azurerm_databricks_workspace.this.id
 }
-
-
-output "databricks_name" {
-  value = azurerm_databricks_workspace.this.name
-}
