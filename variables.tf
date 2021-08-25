@@ -1,24 +1,3 @@
-variable "client_id" {
-  type = string
-}
-
-variable "client_secret" {
-  type = string
-  sensitive = true
-}
-
-variable "tenant_id" {
-  type = string
-}
-
-variable "storage_account_name" {
-  type = string
-}
-
-variable "storage_account_id" {
-  type = string
-}
-
 variable "virtual_network_name" {
   type = string
 }
@@ -32,7 +11,7 @@ variable "project_name" {
 }
 
 variable "resource_number" {
-  type = string
+  type    = string
   default = "001"
 }
 
