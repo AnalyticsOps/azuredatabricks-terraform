@@ -82,7 +82,7 @@ resource "azurerm_databricks_workspace" "this" {
   location                      = data.azurerm_resource_group.this.location
   sku                           = "premium"
   public_network_access_enabled = true
-  managed_resource_group_name   = "db-${data.azurerm_resource_group.this.name}-${local.resource_postfix}"
+  # managed_resource_group_name   = "db-${data.azurerm_resource_group.this.name}-${local.resource_postfix}"
   custom_parameters {
     virtual_network_id  = var.virtual_network_id
     private_subnet_name = azurerm_subnet.priv_databricks_subnet.name
